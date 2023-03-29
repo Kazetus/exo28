@@ -55,6 +55,7 @@ let form = document.createElement('form');
 let label = document.createElement('label');
 let button = document.createElement('button');
 let div = document.createElement('div');
+let month = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Aout', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
 div.className = "container";
 button.type = 'submit';
 button.innerHTML = 'Rechercher un film';
@@ -100,22 +101,38 @@ function afficher(data){
     data.results.map(el => afficherFilm(el));
 }
 function afficherFilm(el) {
-    if(el.poster_path != null) {
+    // if(el.poster_path != null) {
         let filmDiv = document.createElement('div');
         filmDiv.className = "film";
         let img = document.createElement('img');
-        img.src = Imgsrc + el.poster_path;
+        el.poster_path != null ? img.src = Imgsrc + el.poster_path : img.src = 'img/imag.png';
         filmDiv.appendChild(img);
         let title = document.createElement('h2');
-        title.innerHTML = el.title;
+        title.innerHTML = `${el.title}(${el.original_language})`;
         filmDiv.appendChild(title);
+        let note = document.createElement('i');
+        note.className = "fa-solid";
+        el.vote_average >= 5 ? note.classList.add('fa-thumbs-up') : note.classList.add('fa-thumbs-down');
+        note.innerHTML = `<p>La note des utilisateurs est de : ${el.vote_average} / 10</p>`
+        filmDiv.appendChild(note);
         let date = document.createElement('p');
         date.className = "date";
-        date.innerHTML = el.release_date;
+        let dateSortie = new Date(el.release_date);
+        date.innerHTML = `${dateSortie.getDate()} ${month[dateSortie.getMonth()]} ${dateSortie.getFullYear()}`;
         filmDiv.appendChild(date);
         let text = document.createElement('p');
         text.innerHTML = el.overview;
         filmDiv.appendChild(text);
         div.appendChild(filmDiv);
-    }
+    // }
 }
+// const ApiKey = '3aa6970a57e694fc61a86fcf810ba744' 
+// let movie = "code"
+// let movies = []
+
+// const fetchMovie = async ()=>{
+//   const ApiUri = `https://api.themoviedb.org/3/search/movie?api_key=${ApiKey}&query=${movie}`
+//   movies = await fetch(ApiUri).then((response) => response.json())
+//   console.log(movies.results)
+// }
+// fetchMovie();
